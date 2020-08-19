@@ -1,0 +1,15 @@
+{
+  "mqtt": {
+    "ip": "127.0.0.1",
+    "port": "1883",
+    "userName": "user123",
+    "password": "password123",
+    "publishTopic": "pool",
+    "publishRetain": true,
+    "publishQos": 0
+  },
+  "njspc": {
+    "ip": "127.0.0.1",
+    "port": "4200"
+  }
+}
