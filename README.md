@@ -123,7 +123,7 @@ njspc-mqtt-broker will log the output to the console. Note this information to d
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`value_template: "{{ value_json }}"`  
 
 **Home Assistant Lovelace UI Screenshot**
-<img src="https://github.com/kkzonie/njspc-mqtt-broker/blob/master/HA Lovelace Example.png" height="300">
+<img src="https://github.com/kkzonie/njspc-mqtt-broker/blob/master/HA Lovelace.png" height="300">
 
 # Support
 - Todo
