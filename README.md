@@ -49,7 +49,7 @@ If you don't know anything about NodeJS, these directions might be helpful.
 5. Run 'npm install' in the new folder (where package.json exists).  This will automatically install all the dependencies (mqtt, axios, sockets.io, etc).
 6. Edit the /config/config.json to meet your requirements for connecting to your MQTT broker and your nodejs-poolcontroller installation.
 
-Config.json Screenshot
+config.json Screenshot
 
 <img src="https://github.com/kkzonie/njspc-mqtt-broker/blob/master/config.json.png" height="300">
 
@@ -70,7 +70,7 @@ Config.json Screenshot
    * `npm start` will compile the Typescript code.  You should use this every time you download/clone/pull the latest code.
    * `npm run start:cached` will run the app without compiling the code which can be much faster.
 
-### Automate startup of app
+## Automate startup of app
 - Todo
 
 # Home Automation Usage
@@ -113,6 +113,14 @@ njspc-mqtt-broker will log the output to the console. Note this information to d
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`optimistic: false`  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`retain: false`  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`qos: 0`  
+
+`- template:`  
+&nbsp;&nbsp;&nbsp;&nbsp;`- sensors:`  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`- platform: mqtt`  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`name: "Pool Water Temp"`  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`state_topic: "pool/temps/watersensor1/sensor"`  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`unit_of_measurement: '°F'`  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`value_template: "{{ value_json }}"`  
 
 # Support
 - Todo
