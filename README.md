@@ -9,7 +9,7 @@ njspc-mqtt-broker is an application or middleware that sits between the awesome 
 * A functional MQTT broker up and running such as [Eclipse Mosquitto™](https://mosquitto.org/download/)
 * And of course a Home Automation platform such as [Home Assistant](https://www.home-assistant.io)
 
-## Supported Pool Equipment Elements and MQTT Topcis/Messages in v0.9.1
+## Supported Pool Equipment Elements and MQTT Topics/Messages in v0.9.1
 |Equipment Element|MQTT Topic|Sensor (read-only)|State (Read-Write)| Example Message|
 |:-:|:-|:-:|:-:|:-:|
 |Equipment|pool/equipment/controllertype/sensor|X| | IntelliCenter|
