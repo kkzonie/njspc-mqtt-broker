@@ -98,7 +98,7 @@ njspc-mqtt-broker will log the output to the console. Note this information to d
 - Configured as a switch
 - Sensor topics end with /sensor and are read-only
 - State topcis end with /state and are read-write
-- States can only be changes by publishing an of or off message to /set. Example: pool/circuits/6/pool/state/**set**
+- States can only be changed by publishing an on or off message to /set. Example: pool/circuits/6/pool/state/**set** (see below HA configuration example)
 
 **Configuration.yaml**  
 
