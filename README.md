@@ -130,7 +130,7 @@ njspc-mqtt-broker will log the output to the console. Note this information to d
 - Todo
 
 # Changed/dropped since v0.9.0
-1. Added support for Lightgroups (sensor/state | on/off)
+1. Added support for Lightgroups (state | on/off)
 
 # Credit
 - Todo
