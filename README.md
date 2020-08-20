@@ -3,13 +3,13 @@
 ## What is njspc-mqtt-broker?
 njspc-mqtt-broker is an application or middleware that sits between the awesome nodejs-poolcontroller v6.X and an MQTT broker such as Mosquitto allowing any Home Automation platform that integrates with MQTT to communicate with a supported Pentair pool controller. Both sensors (read-only) and states (read-write) are supported.
 
-### Prerequisites
-* Have a supported Pentair Pool Controller supported by [nodejs-poolcontroller v6.X](https://github.com/tagyoureit/nodejs-poolController)
-* A fucntional nodejs-poolcontroller v6.X installation which is porerly communicating to your supported Pool Contoller
-* A functional MQTT broker up and running such as [Eclipse Mosquitto™](https://mosquitto.org/download/)
-* And of course a Home Automation platform such as [Home Assistant](https://www.home-assistant.io)
+## Prerequisites
+* Pentair Pool Controller supported by [nodejs-poolcontroller v6.X](https://github.com/tagyoureit/nodejs-poolController)
+* Fucntional nodejs-poolcontroller v6.X installation which is porerly communicating to your supported Pool Contoller
+* Functional MQTT broker up and running such as [Eclipse Mosquitto™](https://mosquitto.org/download/)
+* And of course an Home Automation platform such as [Home Assistant](https://www.home-assistant.io) so you can automate something!
 
-## Supported Pool Equipment Elements and MQTT Topics/Messages in v0.9.1
+## Supported Pool Equipment Elements exposed to MQTT Topics/Messages in v0.9.1
 |Equipment Element|MQTT Topic|Sensor (read-only)|State (Read-Write)| Example Message|
 |:-:|:-|:-:|:-:|:-:|
 |Equipment|pool/equipment/controllertype/sensor|X| | IntelliCenter|
@@ -37,7 +37,6 @@ njspc-mqtt-broker is an application or middleware that sits between the awesome 
 
 ## Installation Instructions
 
-### Prerequisites
 If you don't know anything about NodeJS, these directions might be helpful.
 
 1. Install Nodejs (v12 recommended). (https://nodejs.org/en/download/)
@@ -45,7 +44,7 @@ If you don't know anything about NodeJS, these directions might be helpful.
 3. Download the latest [code release](https://github.com/kkzonie/njspc-mqtt-broker/releases)
    OR
    clone with `git clone git@github.com:kkzonie/njspc-mqtt-broker.git`
-4. Unzip into njspc-mqtt.broker.
+4. Unzip into njspc-mqtt-broker.
 5. Run 'npm install' in the new folder (where package.json exists).  This will automatically install all the dependencies (mqtt, axios, sockets.io, etc).
 6. Edit the /config/config.json to meet your requirements for connecting to your MQTT broker and your nodejs-poolcontroller installation.
 
@@ -66,12 +65,18 @@ config.json Screenshot
 * &nbsp;&nbsp;`"ip": "127.0.0.1",` <-- change to your nodejs-poolcontroller IP
 * &nbsp;&nbsp;`"port": "4200",` <-- change to your nodejs-poolcontroller Port (normally 4200)
 * `{`
+
 7. Run the app with `npm start`.
-   * `npm start` will compile the Typescript code.  You should use this every time you download/clone/pull the latest code.
-   * `npm run start:cached` will run the app without compiling the code which can be much faster.
+   * `npm start` - You should use this every time you download/clone/pull the latest code.
+   * `npm run start:cached` - Will run the app without compiling the code which can be much faster.
+8. At this point you should see some console logs from njspc-mqtt-broker. If you see something similar to the below, then all is good.  
+__2020-08-19 21:58:44 MQTT: OK (Publish) Topic:pool/circuits/5/spalight/state Message:on__
+
+**Tip:** Use an MQTT tool such as [MQTT Explorer](http://mqtt-explorer.com) to validate your MQTT messages look proper!  
+<img src="https://github.com/kkzonie/njspc-mqtt-broker/blob/master/mqtt_topics.png" height="300">
 
 ## Automate startup of app
-- Todo
+- Todo using PM2
 
 # Home Automation Usage
 Ok, so now you have the following up and running.
@@ -86,7 +91,7 @@ njspc-mqtt-broker upon application startup will gather pool equipment element se
 
 njspc-mqtt-broker will log the output to the console. Note this information to determine your discovered MQTT topic info.
 
-## Example njspc-mqtt-broker Log Output
+### Example njspc-mqtt-broker Log Output
 2020-08-19 21:58:44 HTTP: OK (GET) All Current State info from njsPC  
 === Processing Element: circuits ====  
 2020-08-19 21:58:44 MQTT: OK (Publish) Topic:***`pool/circuits/1/pool/state`*** Message:off  
@@ -94,11 +99,10 @@ njspc-mqtt-broker will log the output to the console. Note this information to d
 === Processing Element: features ====  
 2020-08-19 21:58:44 MQTT: OK (Publish) Topic:pool/features/129/waterscuppers/state Message:off  
 
-## Home Assistant Configuration Example for a Circuit
+### Home Assistant Configuration Example for a Circuit
 - Configured as a switch
-- Sensor topics end with /sensor and are read-only
-- State topcis end with /state and are read-write
-- States can only be changed by publishing an on or off message to /set. Example: pool/circuits/6/pool/state/**set** (see below HA configuration example)
+- State topcis end with **/state** and are __read-write__
+- States can only be changed by publishing an **on** or **off** message to /set. Example: pool/circuits/6/pool/state/**set** (see below HA configuration example)
 
 **Configuration.yaml**  
 
@@ -113,6 +117,11 @@ njspc-mqtt-broker will log the output to the console. Note this information to d
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`optimistic: false`  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`retain: false`  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`qos: 0`  
+
+### Home Assistant Configuration Example for a Sensor
+- Configured as a sensor
+- Sensor topics end with **/sensor** and are __read-only__
+- Sensors can be used for information purposed only. Such as IF pool water temp >= 90, AND time of day is 11am to 5pm, THEN turn on water feature.
 
 `- template:`  
 &nbsp;&nbsp;&nbsp;&nbsp;`- sensors:`  
@@ -133,13 +142,8 @@ njspc-mqtt-broker will log the output to the console. Note this information to d
 1. Added support for Lightgroups (state | on/off)
 
 # Credit
-- Todo
+- None of this would be possible without the amazing **nodejs-poolcontroller** project and all the work put in by project founder @tagyoureit and contributor @Rstrouse.
 
 # License
-njspc-mqtt.broker.  An MQTT broker for Nodejs-PoolController v6.X. By Kelly Kimball, kkzonie.  kkzonie11@gmail.com
-This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Affero General Public License for more details.
-You should have received a copy of the GNU Affero General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
+njspc-mqtt.broker. An MQTT broker for Nodejs-PoolController v6.X.  By Kelly Kimball, @kkzonie.  kkzonie11@gmail.com
+This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.  This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Affero General Public License for more details.  You should have received a copy of the GNU Affero General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
