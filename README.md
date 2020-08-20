@@ -19,21 +19,21 @@ njspc-mqtt-broker is an application or middleware that sits between the awesome 
 |Temps|pool/temps/watersensor1/sensor|X| |84|
 |Temps|pool/temps/watersensor1/air/sensor|X| |91|
 |Temps|pool/temps/watersensor1/solar/sensor|X| |93|
-|Circuits|pool/circuits/**_id_**/**_name_**/state|X|X|on|
-|Features|pool/features/**_id_**/**_name_**/state|X|X|off|
-|Pumps|pool/pumps/**_id_**/**_name_**/status/state|X|X|on|
+|Circuits|pool/circuits/**_id_**/**_name_**/state| |X|on|
+|Features|pool/features/**_id_**/**_name_**/state| |X|off|
+|Pumps|pool/pumps/**_id_**/**_name_**/status/state| |X|on|
 |Pumps|pool/pumps/**_id_**/**_name_**/watts/sensor|X| |144|
 |Pumps|pool/pumps/**_id_**/**_name_**/rpm/sensor|X| |1293|
 |Pumps|pool/pumps/**_id_**/**_name_**/flow/sensor|X| |23|
 |Bodies|pool/bodies/**_id_**/**_name_**/heatertemp/sensor|X| |100|
 |Bodies|pool/bodies/**_id_**/**_name_**/bodystate/sensor|X| |on|
-|Bodies|pool/bodies/**_id_**/**_name_**/heatersetpoint/state|X|X|103|
+|Bodies|pool/bodies/**_id_**/**_name_**/heatersetpoint/state| |X|103|
 |Chlorinators|pool/chlorinators/**_id_**/**_name_**/status/sensor|X| |ok|
 |Chlorinators|pool/chlorinators/**_id_**/**_name_**/targetoutput/sensor|X| |30|
 |Chlorinators|pool/chlorinators/**_id_**/**_name_**/saltlevel/sensor|X| |3800|
-|Chlorinators|pool/chlorinators/**_id_**/**_name_**/poolsetpoint/state|X|X|30|
-|Chlorinators|pool/chlorinators/**_id_**/**_name_**/spasetpoint/state|X|X|0|
-|Lightgroups|pool/lightgroups/**_id_**/**_name_**/state|X|X|off|
+|Chlorinators|pool/chlorinators/**_id_**/**_name_**/poolsetpoint/state| |X|30|
+|Chlorinators|pool/chlorinators/**_id_**/**_name_**/spasetpoint/state| |X|0|
+|Lightgroups|pool/lightgroups/**_id_**/**_name_**/state| |X|off|
 
 ## Installation Instructions
 
