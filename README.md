@@ -59,7 +59,7 @@ config.json Screenshot
 * &nbsp;&nbsp;`"port": "1883",` <-- change to your MQTT Broker Port
 * &nbsp;&nbsp;`"userName": "user123",` <-- change to your MQTT Broker User Name
 * &nbsp;&nbsp;`"password": "password123",` <-- change to your MQTT Broker User Password
-* &nbsp;&nbsp;`"basePublishTopic": "pool",` <-- Desired MQTT base topic, "pool" typically be sufficiant
+* &nbsp;&nbsp;`"publishTopic": "pool",` <-- Desired MQTT base topic, "pool" typically be sufficiant
 * &nbsp;&nbsp;`"publishRetain": "true",` <-- Set to true or false depending on your need
 * `},`
 * &nbsp;&nbsp;`"njspc": {`
