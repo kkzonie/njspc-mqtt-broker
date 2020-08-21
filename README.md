@@ -5,9 +5,9 @@ njspc-mqtt-broker is an application or middleware that sits between the awesome 
 
 ## Prerequisites
 * Pentair Pool Controller supported by [nodejs-poolcontroller v6.X](https://github.com/tagyoureit/nodejs-poolController)
-* Fucntional nodejs-poolcontroller v6.X installation which is porerly communicating to your supported Pool Contoller
+* Functional nodejs-poolcontroller v6.X installation which is properly communicating to your supported Pool Controller
 * Functional MQTT broker up and running such as [Eclipse Mosquitto™](https://mosquitto.org/download/)
-* And of course an Home Automation platform such as [Home Assistant](https://www.home-assistant.io) so you can automate something!
+* And of course, a Home Automation platform such as [Home Assistant](https://www.home-assistant.io) so you can automate something!
 
 ## Supported Pool Equipment Elements exposed to MQTT Topics/Messages in v0.9.1
 |Equipment Element|MQTT Topic|Sensor (read-only)|State (Read-Write)| Example Message|
@@ -45,7 +45,7 @@ If you don't know anything about NodeJS, these directions might be helpful.
    OR
    clone with `git clone git@github.com:kkzonie/njspc-mqtt-broker.git`
 4. Unzip into njspc-mqtt-broker.
-5. Run 'npm install' in the new folder (where package.json exists).  This will automatically install all the dependencies (mqtt, axios, sockets.io, etc).
+5. Run 'npm install' in the new folder (where package.json exists).  This will automatically install all the dependencies (mqtt, axios, sockets.io, etc.).
 6. Edit the /config/config.json to meet your requirements for connecting to your MQTT broker and your nodejs-poolcontroller installation.
 
 config.json Screenshot
@@ -58,7 +58,7 @@ config.json Screenshot
 * &nbsp;&nbsp;`"port": "1883",` <-- change to your MQTT Broker Port
 * &nbsp;&nbsp;`"userName": "user123",` <-- change to your MQTT Broker User Name
 * &nbsp;&nbsp;`"password": "password123",` <-- change to your MQTT Broker User Password
-* &nbsp;&nbsp;`"publishTopic": "pool",` <-- Desired MQTT base topic, "pool" typically is sufficiant
+* &nbsp;&nbsp;`"publishTopic": "pool",` <-- Desired MQTT base topic, "pool" typically is sufficient
 * &nbsp;&nbsp;`"publishRetain": "true",` <-- Set to true or false depending on your need
 * `},`
 * &nbsp;&nbsp;`"njspc": {`
@@ -83,25 +83,31 @@ Ok, so now you have the following up and running.
 - An MQTT Broker
 - nodejs-poolcontroller v6.X
 - njspc-mqtt-broker installed and running, and communicating to both your MQTT Broker and nodejs-poolcontroller installation
-- An Home Automation Platform that supports MQTT such as Home Assistant
+- A Home Automation Platform that supports MQTT such as Home Assistant
 
-njspc-mqtt-broker upon application startup will gather pool equipment element sensor and state infomation. Pool equipment element Name and ID metadata as defined in your pool controller will be used to create the topcis. For example:
+njspc-mqtt-broker upon application startup will gather pool equipment element sensor and state information. Pool equipment element Name and ID metadata as defined in your pool controller will be used to create the topics. For example:
 
-- Pool Controller circuit/relay 1 is configured for "Pool" which turns on/off the Pool Pump. This circuit may also have a valve actualtor turn a valve as part of this circuit being toggled.
+**Example 1:** Pool Controller Circuit/Relay 1 is configured to turn on/off the Pool Pump. You named it "Pool" during its configuration. The MQTT topic dynamically built will be: `pool/circuits/1/pool/state`.
 
-njspc-mqtt-broker will log the output to the console. Note this information to determine your discovered MQTT topic info.
+**Example 2:** Pool Controller Circuit/Relay 5 is configured to turn on/off your IntelliBright LED Spa light. You named it "Spa Light" during its configuration. The MQTT topic dynamically built will be: `pool/circuits/5/spalight/state`
+
+**Example 3:** Pool Controller Feature is configured for a water feature to turn on/off a booster pump and your pool controller placed this on internal feature id 129 and you named it "Water Scuppers" during its configuration. The MQTT topic dynamically built will be: `pool/features/129/waterscuppers/state`
+
+**Note:** njspc-mqtt-broker will convert all pool equipment element names to lowercase and remove spaces and "/" characters.  
+
+When njspc-mqtt-broker has been successfully started, it will log the output to the console. **You will need to note this information to determine your discovered pool equipment elements and dynamically built MQTT topics.**  
 
 ### Example njspc-mqtt-broker Log Output
 2020-08-19 21:58:44 HTTP: OK (GET) All Current State info from njsPC  
 === Processing Element: circuits ====  
-2020-08-19 21:58:44 MQTT: OK (Publish) Topic:***`pool/circuits/1/pool/state`*** Message:off  
-2020-08-19 21:58:44 MQTT: OK (Publish) Topic:pool/circuits/5/spalight/state Message:on  
+2020-08-19 21:58:44 MQTT: OK (Publish) Topic:**`pool/circuits/1/pool/state`** Message:off  
+2020-08-19 21:58:44 MQTT: OK (Publish) Topic:**`pool/circuits/5/spalight/state`** Message:on  
 === Processing Element: features ====  
-2020-08-19 21:58:44 MQTT: OK (Publish) Topic:pool/features/129/waterscuppers/state Message:off  
+2020-08-19 21:58:44 MQTT: OK (Publish) Topic:**`pool/features/129/waterscuppers/state`** Message:off  
 
 ### Home Assistant Configuration Example for a Circuit
 - Configured as a switch
-- State topcis end with **/state** and are __read-write__
+- State topics end with **/state** and are __read-write__
 - States can only be changed by publishing an **on** or **off** message to /set. Example: pool/circuits/6/pool/state/**set** (see below HA configuration example)
 
 **Configuration.yaml**  
