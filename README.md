@@ -94,10 +94,12 @@ njspc-mqtt-broker will log the output to the console. Note this information to d
 ### Example njspc-mqtt-broker Log Output
 2020-08-19 21:58:44 HTTP: OK (GET) All Current State info from njsPC  
 === Processing Element: circuits ====  
-2020-08-19 21:58:44 MQTT: OK (Publish) Topic:***`pool/circuits/1/pool/state`*** Message:off  
-2020-08-19 21:58:44 MQTT: OK (Publish) Topic:pool/circuits/5/spalight/state Message:on  
+2020-08-19 21:58:44 MQTT: OK (Publish) Topic:**`pool/circuits/1/pool/state`** Message:off  
+2020-08-19 21:58:44 MQTT: OK (Publish) Topic:**`pool/circuits/5/spalight/state`** Message:on  
 === Processing Element: features ====  
-2020-08-19 21:58:44 MQTT: OK (Publish) Topic:pool/features/129/waterscuppers/state Message:off  
+2020-08-19 21:58:44 MQTT: OK (Publish) Topic:**`pool/features/129/waterscuppers/state`** Message:off  
+=== Processing Element: temps ====  
+2020-08-20 21:58:44 MQTT: OK (Publish) Topic:**`pool/temps/watersensor1/sensor`** Message:91  
 
 ### Home Assistant Configuration Example for a Circuit
 - Configured as a switch
