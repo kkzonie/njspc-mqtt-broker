@@ -107,7 +107,7 @@ When njspc-mqtt-broker has been successfully started, it will log the output to 
 === Processing Element: temps ====  
 2020-08-20 21:58:44 MQTT: OK (Publish) Topic:**`pool/temps/watersensor1/sensor`** Message:91  
 
-### Home Assistant Configuration Example for a Circuit
+### Home Assistant Configuration Example for a Circuit or Feature
 - Configured as a switch
 - State topics end with **/state** and are __read-write__
 - States can only be changed by publishing an **on** or **off** message to /set. Example: pool/circuits/6/pool/state/**set** (see below HA configuration example)
@@ -120,6 +120,26 @@ When njspc-mqtt-broker has been successfully started, it will log the output to 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`icon: mdi:pool`  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`state_topic: "pool/circuits/1/pool/state"`  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`command_topic: 'pool/circuits/1/pool/state/set'`  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`payload_on: "on"`  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`payload_off: "off"`  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`optimistic: false`  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`retain: false`  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`qos: 0`  
+&nbsp;&nbsp;&nbsp;&nbsp;`- platform: mqtt`  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`name: Spa Light`  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`icon: mdi:car-light-dimmed`  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`state_topic: "pool/circuits/5/spalight/state"`  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`command_topic: 'pool/circuits/5/spalight/state/set'`  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`payload_on: "on"`  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`payload_off: "off"`  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`optimistic: false`  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`retain: false`  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`qos: 0`  
+&nbsp;&nbsp;&nbsp;&nbsp;`- platform: mqtt`  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`name: Water Scuppers`  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`icon: mdi:water`  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`state_topic: "pool/features/129/waterscuppers/state"`  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`command_topic: 'pool/features/129/waterscuppers/state/set'`  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`payload_on: "on"`  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`payload_off: "off"`  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`optimistic: false`  
