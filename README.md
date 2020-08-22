@@ -82,7 +82,7 @@ __2020-08-19 21:58:44 MQTT: OK (Publish) Topic:pool/circuits/5/spalight/state Me
 Ok, so now you have the following up and running.
 - An MQTT server
 - nodejs-poolcontroller v6.X
-- njspc-mqtt-broker installed and running, and communicating to both your MQTT Broker and nodejs-poolcontroller installation
+- njspc-mqtt-broker installed and running, and communicating to both your MQTT Server and nodejs-poolcontroller installation
 - A Home Automation Platform that supports MQTT such as Home Assistant
 
 njspc-mqtt-broker upon application startup will gather pool equipment element sensor and state information. Pool equipment element Name and ID metadata as defined in your pool controller will be used to create the topics. For example:
