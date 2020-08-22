@@ -11,8 +11,11 @@ GNU Affero General Public License for more details.
 You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+
 //glogal variables
 var mqttConnected = false;
+var mqttRetryCounter = 0;
+var axiosRetryCount = 0;
 
 
 //config
@@ -50,6 +53,9 @@ var mqtt_host = "http://"+String(mqtt_ip)+":"+String(mqtt_port)
 
 //mqtt options
 var mqtt_options = {
+  keepalive: 60,
+  clientId: 'mqttjs_' + Math.random().toString(16).substr(2, 8),
+  reconnectPeriod: 1000,
   //credentials for MQTT server (if applicable)
   username: mqtt_userName,
   password: mqtt_password
@@ -76,12 +82,56 @@ mqttClient.on('connect', function () {
   })
 
   //mqttConnected = true;
-  //when MQTT message is received in which we are subscribed to then process
+  //when MQTT message is received in which we are subscribed to, process message
   mqttClient.on("message", onMqttMessageReceived)
 });
 
+//attempting to reconnect to MQTT, exit after 10 seconds
+mqttClient.on('reconnect', function () {
+  console.log('MQTT: ERROR (MQTT server connection lost...Reconnecting)')
+
+  mqttRetryCounter = mqttRetryCounter + 1;
+
+  if (mqttRetryCounter == 10 ) {
+    mqttClient.end(function () {})
+  }
+})
+
+mqttClient.on('end', function () {
+  console.log('MQTT: ERROR (Cannot connect to your MQTT server...Exiting)')
+  process.exit();
+})
+
 //setup axios and make poolController api call for state/all
 const axios = require('axios');
+
+//setup axios-retry
+const axiosRetry = require('axios-retry');
+
+const retryDelay = (retryNumber = 0) => {
+  const seconds = Math.pow(2, retryNumber) * 1000;
+  const randomMs = 1000 * Math.random();
+  axiosFailedRetry()
+  return seconds + randomMs;
+};
+
+axiosRetry(axios, {
+  retries: 2,
+  retryDelay,
+  // retry on Network Error & 5xx responses
+  retryCondition: axiosRetry.isRetryableError,
+});
+
+function axiosFailedRetry() {
+  axiosRetryCount = axiosRetryCount + 1
+  console.log('%s HTTP: ERROR (GET) Cannot connect to njsPC API...Retrying', timeStamp())
+  if (axiosRetryCount == 2) {
+    console.log("%s HTTP: ERROR (GET) Failed to connect to njsPC API...Exiting", timeStamp())
+    process.exit();
+  }
+}
+
+module.exports = axios;
 
 //using moment for logging etc.
 function timeStamp () {
@@ -94,6 +144,8 @@ function timeStamp () {
 //used for initial njsPC state/all API call and to start initial pool element processing
 async function getInitialPoolElementStates() {
   console.log("in func.getInitialPoolElementStates...")
+  console.log("+++ Processing Initial Pool Element States +++")
+  console.log("+++ Attempting API call to njsPC +++")
   let response = await axios.get("http://"+String(njspc_ip)+":"+String(njspc_port)+"/state/all");
   let poolData = response.data;
   console.log("+++ Processing Initial Pool Element States +++")
