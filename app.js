@@ -17,6 +17,8 @@ var mqttConnected = false;
 var mqttRetryCounter = 0;
 var axiosRetryCount = 0;
 
+console.log("NJSPC2MQTT Starting")
+
 //config
 if (process.env.NODE_ENV == undefined) { process.env.NODE_ENV = "config" }
 
@@ -63,16 +65,16 @@ var mqttClient = mqtt.connect(mqtt_host, mqtt_options)
 
 //when connected to MQTT, subscribe to "set" topcis using wildcards
 mqttClient.on('connect', function () {
-  console.log('MQTT: OK (Connected)')
+  console.log('%s MQTT: OK (Connected)', timeStamp())
   //subscribe to {mqtt_publishTopic}/+/+/+/state/set topic to listen for all inbound state SET messages only!
   //we do not want to send back out regular states looped back and then back out to njsPC!!
   mqttClient.subscribe(String(mqtt_publishTopic)+"/+/+/+/state/set", function (err) {
     if (!err) {
       mqttConnected = true;
-      console.log('MQTT: OK (Subscribed to '+String(mqtt_publishTopic)+'/+/+/+/state/set topic)')
+      console.log('%s MQTT: OK (Subscribed to '+String(mqtt_publishTopic)+'/+/+/+/state/set topic)', timeStamp())
         mqttClient.subscribe(String(mqtt_publishTopic)+"/+/+/+/+/state/set", function (err) {
           if (!err) {
-            console.log('MQTT: OK (Subscribed to '+String(mqtt_publishTopic)+'/+/+/+/+/state/set topic)')
+            console.log('%s MQTT: OK (Subscribed to '+String(mqtt_publishTopic)+'/+/+/+/+/state/set topic)', timeStamp())
             //---> if we successfully connect to MQTT, start initial pool element state processing
             getInitialPoolElementStates();
           }
@@ -87,7 +89,7 @@ mqttClient.on('connect', function () {
 
 //attempting to reconnect to MQTT, exit after 10 seconds
 mqttClient.on('reconnect', function () {
-  console.log('MQTT: ERROR (MQTT server connection lost...Reconnecting)')
+  console.log('%s MQTT: ERROR (MQTT server connection lost...Reconnecting)', timeStamp())
 
   mqttRetryCounter = mqttRetryCounter + 1;
 
@@ -97,7 +99,8 @@ mqttClient.on('reconnect', function () {
 })
 
 mqttClient.on('end', function () {
-  console.log('MQTT: ERROR (Cannot connect to your MQTT server...Exiting)')
+  console.log('%s MQTT: ERROR (Cannot connect to your MQTT server...Exiting)', timeStamp())
+  console.log("NJSPC2MQTT Exiting")
   process.exit();
 })
 
@@ -145,7 +148,6 @@ async function getInitialPoolElementStates() {
   console.log("+++ Attempting API call to njsPC +++")
   let response = await axios.get("http://"+String(njspc_ip)+":"+String(njspc_port)+"/state/all");
   let poolData = response.data;
-  console.log("+++ Processing Initial Pool Element States +++")
   console.log('%s HTTP: OK (GET) All Current State info from njsPC', timeStamp())
   //process initial pool element states
   await processPoolElements("equipment", poolData);
@@ -631,7 +633,7 @@ process.on('SIGINT', function() {
   mqttClient.end(function (err) {
     if (!err) {
       console.log("MQTT disconnected")
-
+      console.log("NJSPC2MQTT Exiting")
       process.exit();
     }
   });
