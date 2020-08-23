@@ -1,15 +1,24 @@
-# njspc2mqtt - Version 0.9.1
+# njspc2mqtt - Version 0.9.2
 
 ## What is njspc2mqtt?
-njspc2mqtt is an application or middleware that sits between the awesome nodejs-poolcontroller v6.X and an MQTT broker such as Mosquitto allowing any Home Automation platform that integrates with MQTT to communicate with a supported Pentair pool controller. Both sensors (read-only) and states (read-write) are supported.
+njspc2mqtt is an application or middleware that sits between the awesome nodejs-poolcontroller v6.X and an MQTT server allowing any Home Automation platform that integrates with MQTT to communicate with a supported Pentair pool controller. Both sensors (read-only) and states (read-write) are supported.
 
 ## Prerequisites
 * Pentair Pool Controller supported by [nodejs-poolcontroller v6.X](https://github.com/tagyoureit/nodejs-poolController)
 * Functional nodejs-poolcontroller v6.X installation which is properly communicating to your supported Pool Controller
-* Functional MQTT broker up and running such as [Eclipse Mosquitto™](https://mosquitto.org/download/)
+* Functional MQTT server up and running such as [Eclipse Mosquitto™](https://mosquitto.org/download/)
 * And of course, a Home Automation platform such as [Home Assistant](https://www.home-assistant.io) so you can automate something!
 
-## Supported Pool Equipment Elements exposed to MQTT Topics/Messages in v0.9.1
+## What's New
+v0.9.2
+- Added MQTT reconnect capability
+- Added Axios-Retry support for API calls
+
+v0.9.1
+- Added support for Lightgroups (state | on/off)
+- Inititial Release
+
+## Supported Pool Equipment Elements exposed to MQTT Topics/Messages as of v0.9.2
 |Equipment Element|MQTT Topic|Sensor (read-only)|State (Read-Write)| Example Message|
 |:-:|:-|:-:|:-:|:-:|
 |Equipment|pool/equipment/controllertype/sensor|X| | IntelliCenter|
@@ -46,7 +55,7 @@ If you don't know anything about NodeJS, these directions might be helpful.
    clone with `git clone git@github.com:kkzonie/njspc2mqtt.git`
 4. Unzip into njspc2mqtt.
 5. Run 'npm install' in the new folder (where package.json exists).  This will automatically install all the dependencies (mqtt, axios, sockets.io, etc.).
-6. Edit the /config/config.json to meet your requirements for connecting to your MQTT broker and your nodejs-poolcontroller installation.
+6. Edit the /config/config.json to meet your requirements for connecting to your MQTT server and your nodejs-poolcontroller installation.
 
 config.json Screenshot
 
@@ -54,10 +63,10 @@ config.json Screenshot
 
 * `{`
 * &nbsp;&nbsp;`"mqtt": {`
-* &nbsp;&nbsp;`"ip": "127.0.0.1",` <-- change to your MQTT Broker IP
-* &nbsp;&nbsp;`"port": "1883",` <-- change to your MQTT Broker Port
-* &nbsp;&nbsp;`"userName": "user123",` <-- change to your MQTT Broker User Name
-* &nbsp;&nbsp;`"password": "password123",` <-- change to your MQTT Broker User Password
+* &nbsp;&nbsp;`"ip": "127.0.0.1",` <-- change to your MQTT server IP
+* &nbsp;&nbsp;`"port": "1883",` <-- change to your MQTT server Port
+* &nbsp;&nbsp;`"userName": "user123",` <-- change to your MQTT server User Name
+* &nbsp;&nbsp;`"password": "password123",` <-- change to your MQTT server User Password
 * &nbsp;&nbsp;`"publishTopic": "pool",` <-- Desired MQTT base topic, "pool" typically is sufficient
 * &nbsp;&nbsp;`"publishRetain": "true",` <-- Set to true or false depending on your need
 * `},`
@@ -80,9 +89,9 @@ __2020-08-19 21:58:44 MQTT: OK (Publish) Topic:pool/circuits/5/spalight/state Me
 
 # Home Automation Usage
 Ok, so now you have the following up and running.
-- An MQTT Broker
+- An MQTT server
 - nodejs-poolcontroller v6.X
-- njspc2mqtt installed and running, and communicating to both your MQTT Broker and nodejs-poolcontroller installation
+- njspc2mqtt installed and running, and communicating to both your MQTT Server and nodejs-poolcontroller installation
 - A Home Automation Platform that supports MQTT such as Home Assistant
 
 njspc2mqtt upon application startup will gather pool equipment element sensor and state information. Pool equipment element Name and ID metadata as defined in your pool controller will be used to create the topics. For example:
@@ -163,11 +172,15 @@ When njspc2mqtt has been successfully started, it will log the output to the con
 
 <img src="https://github.com/kkzonie/njspc2mqtt/blob/master/HA Lovelace.png" height="300">
 
-# Support
-- Todo
+### Alexa Support
+Alexa is supported as long as your Home Automation platform suports Alexa integration. In the case of Home Assistant, if Alexa is integrated there are no issues having Alexa toggle a pool circuit, feature, or Setpoint.
 
-# Changed/dropped since v0.9.0
-1. Added support for Lightgroups (state | on/off)
+`Alexa, Spa on`
+`Alexa, Pool off`
+`Alexa, Water Scuppers on`
+
+# Support
+- Contact: kkzonie11@gmail.com
 
 # Credit
 - None of this would be possible without the amazing **nodejs-poolcontroller** project and all the work put in by project founder @tagyoureit and contributor @Rstrouse.

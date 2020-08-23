@@ -11,9 +11,13 @@ GNU Affero General Public License for more details.
 You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+
 //glogal variables
 var mqttConnected = false;
+var mqttRetryCounter = 0;
+var axiosRetryCount = 0;
 
+console.log("NJSPC2MQTT Starting")
 
 //config
 if (process.env.NODE_ENV == undefined) { process.env.NODE_ENV = "config" }
@@ -50,6 +54,9 @@ var mqtt_host = "http://"+String(mqtt_ip)+":"+String(mqtt_port)
 
 //mqtt options
 var mqtt_options = {
+  keepalive: 60,
+  clientId: 'mqttjs_' + Math.random().toString(16).substr(2, 8),
+  reconnectPeriod: 1000,
   //credentials for MQTT server (if applicable)
   username: mqtt_userName,
   password: mqtt_password
@@ -58,16 +65,16 @@ var mqttClient = mqtt.connect(mqtt_host, mqtt_options)
 
 //when connected to MQTT, subscribe to "set" topcis using wildcards
 mqttClient.on('connect', function () {
-  console.log('MQTT: OK (Connected)')
+  console.log('%s MQTT: OK (Connected)', timeStamp())
   //subscribe to {mqtt_publishTopic}/+/+/+/state/set topic to listen for all inbound state SET messages only!
   //we do not want to send back out regular states looped back and then back out to njsPC!!
   mqttClient.subscribe(String(mqtt_publishTopic)+"/+/+/+/state/set", function (err) {
     if (!err) {
       mqttConnected = true;
-      console.log('MQTT: OK (Subscribed to '+String(mqtt_publishTopic)+'/+/+/+/state/set topic)')
+      console.log('%s MQTT: OK (Subscribed to '+String(mqtt_publishTopic)+'/+/+/+/state/set topic)', timeStamp())
         mqttClient.subscribe(String(mqtt_publishTopic)+"/+/+/+/+/state/set", function (err) {
           if (!err) {
-            console.log('MQTT: OK (Subscribed to '+String(mqtt_publishTopic)+'/+/+/+/+/state/set topic)')
+            console.log('%s MQTT: OK (Subscribed to '+String(mqtt_publishTopic)+'/+/+/+/+/state/set topic)', timeStamp())
             //---> if we successfully connect to MQTT, start initial pool element state processing
             getInitialPoolElementStates();
           }
@@ -76,12 +83,57 @@ mqttClient.on('connect', function () {
   })
 
   //mqttConnected = true;
-  //when MQTT message is received in which we are subscribed to then process
+  //when MQTT message is received in which we are subscribed to, process message
   mqttClient.on("message", onMqttMessageReceived)
 });
 
+//attempting to reconnect to MQTT, exit after 10 seconds
+mqttClient.on('reconnect', function () {
+  console.log('%s MQTT: ERROR (MQTT server connection lost...Reconnecting)', timeStamp())
+
+  mqttRetryCounter = mqttRetryCounter + 1;
+
+  if (mqttRetryCounter == 30 ) {
+    mqttClient.end(function () {})
+  }
+})
+
+mqttClient.on('end', function () {
+  console.log('%s MQTT: ERROR (Cannot connect to your MQTT server...Exiting)', timeStamp())
+  console.log("NJSPC2MQTT Exiting")
+  process.exit();
+})
+
 //setup axios and make poolController api call for state/all
 const axios = require('axios');
+
+//setup axios-retry
+const axiosRetry = require('axios-retry');
+
+const retryDelay = (retryNumber = 0) => {
+  const seconds = Math.pow(2, retryNumber) * 1000;
+  const randomMs = 1000 * Math.random();
+  axiosFailedRetry()
+  return seconds + randomMs;
+};
+
+axiosRetry(axios, {
+  retries: 2,
+  retryDelay,
+  // retry on Network Error & 5xx responses
+  retryCondition: axiosRetry.isRetryableError,
+});
+
+function axiosFailedRetry() {
+  axiosRetryCount = axiosRetryCount + 1
+  console.log('%s HTTP: ERROR (GET) Cannot connect to njsPC API...Retrying', timeStamp())
+  if (axiosRetryCount == 2) {
+    console.log("%s HTTP: ERROR (GET) Failed to connect to njsPC API...Exiting", timeStamp())
+    process.exit();
+  }
+}
+
+module.exports = axios;
 
 //using moment for logging etc.
 function timeStamp () {
@@ -89,14 +141,13 @@ function timeStamp () {
   return datetime
 }
 
-//
-//
 //used for initial njsPC state/all API call and to start initial pool element processing
 async function getInitialPoolElementStates() {
   console.log("in func.getInitialPoolElementStates...")
+  console.log("+++ Processing Initial Pool Element States +++")
+  console.log("+++ Attempting API call to njsPC +++")
   let response = await axios.get("http://"+String(njspc_ip)+":"+String(njspc_port)+"/state/all");
   let poolData = response.data;
-  console.log("+++ Processing Initial Pool Element States +++")
   console.log('%s HTTP: OK (GET) All Current State info from njsPC', timeStamp())
   //process initial pool element states
   await processPoolElements("equipment", poolData);
@@ -309,9 +360,7 @@ async function sendMqttElementState(elementType, elementId, elementName, element
 //process real-time socket.io pool circuit state updates
 ioClient.on("circuit", function(data) {
   console.log("=== Received socket.io(circuit) message ===")
-    //console.log("circuitId: ",circuitId);
-    //console.log("circuitName: ",circuitName);
-    //console.log("circuitState: ",circuitState);
+  
   var circuit_id = (jsonata("id").evaluate(data));
   var circuit_name = (jsonata("name").evaluate(data));
   circuit_name = circuit_name.split(" ").join("");
@@ -319,7 +368,7 @@ ioClient.on("circuit", function(data) {
     //console.log("circuit_id:",circuit_id);
     //console.log("circuit_name:",circuit_name);
     //console.log("circuit_state:",circuit_state);
-  
+    
   if (circuit_state) {
     circuit_state = "on"
   } else {
@@ -333,10 +382,7 @@ ioClient.on("circuit", function(data) {
  ioClient.on("feature", function(data) {
   JSON.stringify(data)
   console.log("=== Received socket.io(feature) message ===")
-    //console.log("feature",data)
-    //console.log("featureId: ",featureId);
-    //console.log("featureName: ",featureName);
-    //console.log("featureState: ",featureState);
+
   var feature_id = (jsonata("id").evaluate(data));
   var feature_name = (jsonata("name").evaluate(data));
   feature_name = feature_name.split(" ").join("");
@@ -357,12 +403,7 @@ ioClient.on("circuit", function(data) {
 //process real-time socket.io pool pump state updates
 ioClient.on("pump", function(data) {
   console.log("=== Received socket.io(pump) message ===")
-    //console.log("pump",data)
-    // console.log("pumpId: ",pumpId);
-    // console.log("pumpName: ",pumpName);
-    // console.log("pumpWatts: ",pumpWatts);
-    // console.log("pumpRpm: ",pumpRpm);
-    // console.log("pumpFlow: ",pumpFlow);
+ 
   var pump_id = (jsonata("id").evaluate(data));
   var pump_name = (jsonata("name").evaluate(data));
   pump_name = pump_name.split(" ").join("");
@@ -497,7 +538,6 @@ function onMqttMessageReceived(topic, message) {
   
   //send state changes to njsPC for SET state only!!!
   if (topicSubString == "set") {
-    //var topic_str = topic;
     var element_type = topic.split('/');
     element_type = element_type[1];
 
@@ -586,7 +626,6 @@ function onMqttMessageReceived(topic, message) {
       });
     }
 
-
   }
 }
 
@@ -594,7 +633,7 @@ process.on('SIGINT', function() {
   mqttClient.end(function (err) {
     if (!err) {
       console.log("MQTT disconnected")
-
+      console.log("NJSPC2MQTT Exiting")
       process.exit();
     }
   });
