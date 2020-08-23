@@ -1,7 +1,7 @@
 {
-  "name": "njspc-mqtt-broker",
+  "name": "njspc2mqtt",
   "version": "0.9.2",
-  "description": "njspc-mqtt-broker",
+  "description": "njspc2mqtt",
   "main": "app.js",
   "scripts": {
     "start": "npm run && node app.js",

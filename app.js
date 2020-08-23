@@ -1,4 +1,4 @@
-/*  njspc-mqtt.broker.  An MQTT broker for Nodejs-PoolController v6.X.
+/*  njspc2mqtt.  An MQTT broker for nodejs-PoolController v6.X.
 By Kelly Kimball, kkzonie.  kkzonie11@gmail.com
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU Affero General Public License as
