@@ -1,10 +1,11 @@
 {
   "name": "njspc-mqtt-broker",
-  "version": "0.9.1",
+  "version": "0.9.2",
   "description": "njspc-mqtt-broker",
   "main": "app.js",
   "scripts": {
-    "start": "npm run && node app.js"
+    "start": "npm run && node app.js",
+    "start:cached": "node app.js"
   },
   "keywords": [],
   "author": "Kelly Kimball",

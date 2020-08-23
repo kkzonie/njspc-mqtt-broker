@@ -17,7 +17,6 @@ var mqttConnected = false;
 var mqttRetryCounter = 0;
 var axiosRetryCount = 0;
 
-
 //config
 if (process.env.NODE_ENV == undefined) { process.env.NODE_ENV = "config" }
 
@@ -92,7 +91,7 @@ mqttClient.on('reconnect', function () {
 
   mqttRetryCounter = mqttRetryCounter + 1;
 
-  if (mqttRetryCounter == 10 ) {
+  if (mqttRetryCounter == 30 ) {
     mqttClient.end(function () {})
   }
 })
@@ -139,8 +138,6 @@ function timeStamp () {
   return datetime
 }
 
-//
-//
 //used for initial njsPC state/all API call and to start initial pool element processing
 async function getInitialPoolElementStates() {
   console.log("in func.getInitialPoolElementStates...")
@@ -361,9 +358,7 @@ async function sendMqttElementState(elementType, elementId, elementName, element
 //process real-time socket.io pool circuit state updates
 ioClient.on("circuit", function(data) {
   console.log("=== Received socket.io(circuit) message ===")
-    //console.log("circuitId: ",circuitId);
-    //console.log("circuitName: ",circuitName);
-    //console.log("circuitState: ",circuitState);
+  
   var circuit_id = (jsonata("id").evaluate(data));
   var circuit_name = (jsonata("name").evaluate(data));
   circuit_name = circuit_name.split(" ").join("");
@@ -371,7 +366,7 @@ ioClient.on("circuit", function(data) {
     //console.log("circuit_id:",circuit_id);
     //console.log("circuit_name:",circuit_name);
     //console.log("circuit_state:",circuit_state);
-  
+    
   if (circuit_state) {
     circuit_state = "on"
   } else {
@@ -385,10 +380,7 @@ ioClient.on("circuit", function(data) {
  ioClient.on("feature", function(data) {
   JSON.stringify(data)
   console.log("=== Received socket.io(feature) message ===")
-    //console.log("feature",data)
-    //console.log("featureId: ",featureId);
-    //console.log("featureName: ",featureName);
-    //console.log("featureState: ",featureState);
+
   var feature_id = (jsonata("id").evaluate(data));
   var feature_name = (jsonata("name").evaluate(data));
   feature_name = feature_name.split(" ").join("");
@@ -409,12 +401,7 @@ ioClient.on("circuit", function(data) {
 //process real-time socket.io pool pump state updates
 ioClient.on("pump", function(data) {
   console.log("=== Received socket.io(pump) message ===")
-    //console.log("pump",data)
-    // console.log("pumpId: ",pumpId);
-    // console.log("pumpName: ",pumpName);
-    // console.log("pumpWatts: ",pumpWatts);
-    // console.log("pumpRpm: ",pumpRpm);
-    // console.log("pumpFlow: ",pumpFlow);
+ 
   var pump_id = (jsonata("id").evaluate(data));
   var pump_name = (jsonata("name").evaluate(data));
   pump_name = pump_name.split(" ").join("");
@@ -549,7 +536,6 @@ function onMqttMessageReceived(topic, message) {
   
   //send state changes to njsPC for SET state only!!!
   if (topicSubString == "set") {
-    //var topic_str = topic;
     var element_type = topic.split('/');
     element_type = element_type[1];
 
@@ -637,7 +623,6 @@ function onMqttMessageReceived(topic, message) {
         console.log(error);
       });
     }
-
 
   }
 }

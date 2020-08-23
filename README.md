@@ -1,4 +1,4 @@
-# njspc-mqtt-broker - Version 0.9.1
+# njspc-mqtt-broker - Version 0.9.2
 
 ## What is njspc-mqtt-broker?
 njspc-mqtt-broker is an application or middleware that sits between the awesome nodejs-poolcontroller v6.X and an MQTT server allowing any Home Automation platform that integrates with MQTT to communicate with a supported Pentair pool controller. Both sensors (read-only) and states (read-write) are supported.
@@ -8,6 +8,14 @@ njspc-mqtt-broker is an application or middleware that sits between the awesome 
 * Functional nodejs-poolcontroller v6.X installation which is properly communicating to your supported Pool Controller
 * Functional MQTT server up and running such as [Eclipse Mosquitto™](https://mosquitto.org/download/)
 * And of course, a Home Automation platform such as [Home Assistant](https://www.home-assistant.io) so you can automate something!
+
+## What's New
+v0.9.2
+- Added MQTT reconnect capability
+- Added Axios-Retry support for API calls
+
+v0.9.1
+- Inititial Release
 
 ## Supported Pool Equipment Elements exposed to MQTT Topics/Messages in v0.9.1
 |Equipment Element|MQTT Topic|Sensor (read-only)|State (Read-Write)| Example Message|
