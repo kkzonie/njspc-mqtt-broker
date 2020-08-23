@@ -15,9 +15,10 @@ v0.9.2
 - Added Axios-Retry support for API calls
 
 v0.9.1
+- Added support for Lightgroups (state | on/off)
 - Inititial Release
 
-## Supported Pool Equipment Elements exposed to MQTT Topics/Messages in v0.9.1
+## Supported Pool Equipment Elements exposed to MQTT Topics/Messages as of v0.9.2
 |Equipment Element|MQTT Topic|Sensor (read-only)|State (Read-Write)| Example Message|
 |:-:|:-|:-:|:-:|:-:|
 |Equipment|pool/equipment/controllertype/sensor|X| | IntelliCenter|
@@ -169,13 +170,17 @@ When njspc-mqtt-broker has been successfully started, it will log the output to 
 
 **Home Assistant Lovelace UI Screenshot**
 
-<img src="https://github.com/kkzonie/njspc-mqtt-broker/blob/master/HA Lovelace.png" height="300">
+<img src="https://github.com/kkzonie/njspc-mqtt-broker/blob/master/HA Lovelace.png" height="300">  
+
+### Alexa Support
+Alexa is supported as long as your Home Automation platform suports Alexa integration. In the case of Home Assistant, if Alexa is integrated there are no issues having Alexa toggle a pool circuit, feature, or Setpoint.
+
+`Alexa, Spa on`
+`Alexa, Pool off`
+`Alexa, Water Scuppers on`
 
 # Support
-- Todo
-
-# Changed/dropped since v0.9.0
-1. Added support for Lightgroups (state | on/off)
+- Contact: kkzonie11@gmail.com
 
 # Credit
 - None of this would be possible without the amazing **nodejs-poolcontroller** project and all the work put in by project founder @tagyoureit and contributor @Rstrouse.
