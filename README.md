@@ -175,7 +175,7 @@ When njspc2mqtt has been successfully started, it will log the output to the con
 
 **Home Assistant Lovelace UI Screenshot**
 
-<img src="https://github.com/kkzonie/njspc2mqtt/blob/master/HA Lovelace.png" height="300">  
+<img src="https://github.com/kkzonie/njspc2mqtt/blob/master/HA Lovelace.png" height="300">
 
 ### Alexa Support
 Alexa is supported as long as your Home Automation platform suports Alexa integration. In the case of Home Assistant, if Alexa is integrated there are no issues having Alexa toggle a pool circuit, feature, or Setpoint.
