@@ -560,7 +560,7 @@ function onMqttMessageReceived(topic, message) {
         message_str = false
       }
       element_type = "circuit"
-      var url = "http://10.20.1.250:4200/state/"+String(element_type)+"/setState"
+      var url = "http://"+String(njspc_ip)+":"+String(njspc_port)+"/state/"+String(element_type)+"/setState"
 
       axios.put(url, {
         id: element_id,
@@ -584,7 +584,7 @@ function onMqttMessageReceived(topic, message) {
         message_str = 40
       }
 
-      var url = "http://10.20.1.250:4200/state/"+String(element_type)+"/setPoint"
+      var url = "http://"+String(njspc_ip)+":"+String(njspc_port)+"/state/"+String(element_type)+"/setPoint"
     
       axios.put(url, {
         id: element_id,
@@ -611,7 +611,7 @@ function onMqttMessageReceived(topic, message) {
         message_str = 40
       }
 
-      var url = "http://10.20.1.250:4200/state/"+String(element_type)+"/"+String(chlorinator_body)
+      var url = "http://"+String(njspc_ip)+":"+String(njspc_port)+"/state/"+String(element_type)+"/"+String(chlorinator_body)
     
       axios.put(url, {
         id: element_id,
