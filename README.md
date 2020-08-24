@@ -1,4 +1,9 @@
 # njspc2mqtt - Version 0.9.2
+![GitHub package.json version](https://img.shields.io/github/package-json/v/kkzonie/njspc2mqtt)
+![GitHub top language](https://img.shields.io/github/languages/top/kkzonie/njspc2mqtt)
+![GitHub All Releases](https://img.shields.io/github/downloads/kkzonie/njspc2mqtt/total)
+![GitHub](https://img.shields.io/github/license/kkzonie/njspc2mqtt)
+
 
 ## What is njspc2mqtt?
 njspc2mqtt is an application or middleware that sits between the awesome nodejs-poolcontroller v6.X and an MQTT server allowing any Home Automation platform that integrates with MQTT to communicate with a supported Pentair pool controller. Both sensors (read-only) and states (read-write) are supported.
@@ -52,7 +57,7 @@ If you don't know anything about NodeJS, these directions might be helpful.
 2. Update NPM (https://docs.npmjs.com/getting-started/installing-node).
 3. Download the latest [code release](https://github.com/kkzonie/njspc2mqtt/releases)
    OR
-   clone with `git clone git@github.com:kkzonie/njspc2mqtt.git`
+   clone with `git clone https://github.com/kkzonie/njspc2mqtt.git`
 4. Unzip into njspc2mqtt.
 5. Run 'npm install' in the new folder (where package.json exists).  This will automatically install all the dependencies (mqtt, axios, sockets.io, etc.).
 6. Edit the /config/config.json to meet your requirements for connecting to your MQTT server and your nodejs-poolcontroller installation.
