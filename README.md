@@ -52,7 +52,7 @@ If you don't know anything about NodeJS, these directions might be helpful.
 2. Update NPM (https://docs.npmjs.com/getting-started/installing-node).
 3. Download the latest [code release](https://github.com/kkzonie/njspc2mqtt/releases)
    OR
-   clone with `git clone git@github.com:kkzonie/njspc2mqtt.git`
+   clone with `git clone https://github.com/kkzonie/njspc2mqtt.git`
 4. Unzip into njspc2mqtt.
 5. Run 'npm install' in the new folder (where package.json exists).  This will automatically install all the dependencies (mqtt, axios, sockets.io, etc.).
 6. Edit the /config/config.json to meet your requirements for connecting to your MQTT server and your nodejs-poolcontroller installation.
