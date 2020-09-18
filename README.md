@@ -1,5 +1,7 @@
 # njspc2mqtt - Version 0.9.2
 
+## njspc2mqtt is now deferred as of 9/17/20 to [nodejs-poolcontroller v6.10](https://github.com/tagyoureit/nodejs-poolController) now natively supports MQTT.
+
 ## What is njspc2mqtt?
 njspc2mqtt is an application or middleware that sits between the awesome nodejs-poolcontroller v6.X and an MQTT server allowing any Home Automation platform that integrates with MQTT to communicate with a supported Pentair pool controller. Both sensors (read-only) and states (read-write) are supported.
 
